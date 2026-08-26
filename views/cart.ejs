@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - CodeAlpha Store</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="container">
+    <h1>Your Cart</h1>
+
+    <% if (items.length === 0) { %>
+      <p>Your cart is empty. <a href="/">Browse products</a>.</p>
+    <% } else { %>
+      <table class="cart-table">
+        <thead>
+          <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td><%= item.product.name %></td>
+              <td>$<%= item.product.price.toFixed(2) %></td>
+              <td>
+                <form action="/cart/update/<%= item.product._id %>" method="POST" class="inline-form">
+                  <input type="number" name="quantity" value="<%= item.quantity %>" min="0" style="width:60px">
+                  <button type="submit" class="link-btn">Update</button>
+                </form>
+              </td>
+              <td>$<%= item.subtotal.toFixed(2) %></td>
+              <td>
+                <form action="/cart/remove/<%= item.product._id %>" method="POST" class="inline-form">
+                  <button type="submit" class="link-btn remove">Remove</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <h2>Total: $<%= total.toFixed(2) %></h2>
+
+      <form action="/checkout" method="POST">
+        <button type="submit" class="btn btn-dark">Checkout</button>
+      </form>
+    <% } %>
+  </main>
+</body>
+</html>

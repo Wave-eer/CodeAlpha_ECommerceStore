@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <a href="/" class="brand">Halo Market</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <% if (userId) { %>
+      <a href="/cart">Cart</a>
+      <a href="/orders">My Orders</a>
+      <span class="welcome">Hi, <%= userName %></span>
+      <form action="/auth/logout" method="POST" class="inline-form">
+        <button type="submit" class="link-btn">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+    <% } %>
+  </div>
+</nav>

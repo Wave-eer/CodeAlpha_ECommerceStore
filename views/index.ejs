@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CodeAlpha Store</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="container">
+    <h1>Our Products</h1>
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+          <h3><%= product.name %></h3>
+          <p class="price">$<%= product.price.toFixed(2) %></p>
+          <a href="/products/<%= product._id %>" class="btn">View Details</a>
+        </div>
+      <% }) %>
+    </div>
+    <% if (products.length === 0) { %>
+      <p>No products yet. Run <code>npm run seed</code> to add sample products.</p>
+    <% } %>
+  </main>
+</body>
+</html>

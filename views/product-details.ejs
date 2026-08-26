@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= product.name %> - CodeAlpha Store</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="container product-detail">
+    <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+    <div class="product-info">
+      <h1><%= product.name %></h1>
+      <p class="price">$<%= product.price.toFixed(2) %></p>
+      <p><%= product.description %></p>
+      <p class="stock">In stock: <%= product.stock %></p>
+
+      <% if (userId) { %>
+        <form action="/cart/add/<%= product._id %>" method="POST" class="add-form">
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" max="<%= product.stock %>">
+          <button type="submit" class="btn">Add to Cart</button>
+        </form>
+      <% } else { %>
+        <p><a href="/auth/login">Log in</a> to add this to your cart.</p>
+      <% } %>
+
+      <a href="/" class="back-link">&larr; Back to products</a>
+    </div>
+  </main>
+</body>
+</html>
