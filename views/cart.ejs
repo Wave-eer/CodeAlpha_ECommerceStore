@@ -1,51 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang=\"en\">
 <head>
-  <meta charset="UTF-8">
-  <title>Your Cart - CodeAlpha Store</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <title>Shopping Cart — Halo Market</title>
+  <link rel=\"stylesheet\" href=\"/css/style.css\">
+  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
+  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
+  <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap\" rel=\"stylesheet\">
 </head>
 <body>
   <%- include('partials/navbar') %>
 
-  <main class="container">
-    <h1>Your Cart</h1>
+  <main class=\"container cart-page-container\">
+    <div class=\"page-header-simple\">
+      <h1 class=\"section-heading\">Your Shopping Cart</h1>
+      <p class=\"section-subtitle\"><%= items.length %> unique product<%= items.length === 1 ? '' : 's' %> in your cart</p>
+    </div>
 
     <% if (items.length === 0) { %>
-      <p>Your cart is empty. <a href="/">Browse products</a>.</p>
+      <div class=\"empty-cart-card\">
+        <div class=\"empty-cart-icon\">🛒</div>
+        <h2>Your cart is currently empty</h2>
+        <p>Explore our premium everyday essentials and technology to find items you'll love.</p>
+        <a href=\"/\" class=\"btn btn-primary\">Start Shopping</a>
+      </div>
     <% } else { %>
-      <table class="cart-table">
-        <thead>
-          <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
-        </thead>
-        <tbody>
-          <% items.forEach(item => { %>
-            <tr>
-              <td><%= item.product.name %></td>
-              <td>$<%= item.product.price.toFixed(2) %></td>
-              <td>
-                <form action="/cart/update/<%= item.product._id %>" method="POST" class="inline-form">
-                  <input type="number" name="quantity" value="<%= item.quantity %>" min="0" style="width:60px">
-                  <button type="submit" class="link-btn">Update</button>
-                </form>
-              </td>
-              <td>$<%= item.subtotal.toFixed(2) %></td>
-              <td>
-                <form action="/cart/remove/<%= item.product._id %>" method="POST" class="inline-form">
-                  <button type="submit" class="link-btn remove">Remove</button>
-                </form>
-              </td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
+      <div class=\"cart-columns-layout\">
+        <!-- Left Column: Items List -->
+        <div class=\"cart-items-column\">
+          <div class=\"cart-table-wrapper\">
+            <table class=\"cart-table-modern\">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.forEach(item => { %>
+                  <tr>
+                    <td class=\"cart-item-info\">
+                      <img src=\"<%= item.product.imageUrl %>\" alt=\"<%= item.product.name %>\" class=\"cart-thumb\" onerror=\"this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&q=80'\">
+                      <div class=\"cart-item-details\">
+                        <a href=\"/products/<%= item.product._id %>\" class=\"cart-item-title\"><%= item.product.name %></a>
+                        <span class=\"cart-item-cat\"><%= (item.product.category || 'general').toUpperCase() %></span>
+                      </div>
+                    </td>
+                    <td class=\"cart-price\">$<%= item.product.price.toFixed(2) %></td>
+                    <td>
+                      <form action=\"/cart/update/<%= item.product._id %>\" method=\"POST\" class=\"cart-qty-form\">
+                        <div class=\"qty-stepper-sm\">
+                          <input type=\"number\" name=\"quantity\" value=\"<%= item.quantity %>\" min=\"0\" max=\"99\" onchange=\"this.form.submit()\">
+                          <button type=\"submit\" class=\"btn-qty-update\" title=\"Update quantity\">Update</button>
+                        </div>
+                      </form>
+                    </td>
+                    <td class=\"cart-subtotal\">$<%= item.subtotal.toFixed(2) %></td>
+                    <td class=\"cart-remove-cell\">
+                      <form action=\"/cart/remove/<%= item.product._id %>\" method=\"POST\">
+                        <button type=\"submit\" class=\"btn-cart-remove\" title=\"Remove product\" aria-label=\"Remove\">&times;</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
 
-      <h2>Total: $<%= total.toFixed(2) %></h2>
+          <div class=\"cart-actions-bar\">
+            <a href=\"/\" class=\"btn-continue-shopping\">&larr; Continue Shopping</a>
+          </div>
+        </div>
 
-      <form action="/checkout" method="POST">
-        <button type="submit" class="btn btn-dark">Checkout</button>
-      </form>
+        <!-- Right Column: Order Summary -->
+        <div class=\"cart-summary-column\">
+          <div class=\"summary-card\">
+            <h3>Order Summary</h3>
+
+            <div class=\"summary-line\">
+              <span>Items Subtotal</span>
+              <span>$<%= subtotal.toFixed(2) %></span>
+            </div>
+
+            <% if (discount > 0) { %>
+              <div class=\"summary-line discount-line\">
+                <span>Discount (<%= promoCode %>)</span>
+                <span>-$<%= discount.toFixed(2) %></span>
+              </div>
+            <% } %>
+
+            <div class=\"summary-line\">
+              <span>Estimated Shipping</span>
+              <span><%= shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2) %></span>
+            </div>
+
+            <% if (subtotal < 50) { %>
+              <div class=\"shipping-free-hint\">
+                <span>💡 Add <strong>$<%= (50 - subtotal).toFixed(2) %></strong> more for FREE shipping!</span>
+              </div>
+            <% } else { %>
+              <div class=\"shipping-free-achieved\">
+                <span>🎉 You unlocked FREE Express Shipping!</span>
+              </div>
+            <% } %>
+
+            <div class=\"summary-divider\"></div>
+
+            <div class=\"summary-line summary-total-line\">
+              <span>Total</span>
+              <span class=\"grand-total\">$<%= total.toFixed(2) %></span>
+            </div>
+
+            <!-- Coupon Code Form -->
+            <form action=\"/cart/promo\" method=\"POST\" class=\"promo-form\">
+              <div class=\"promo-input-row\">
+                <input type=\"text\" name=\"code\" placeholder=\"Promo code (e.g. ALPHA10)\" value=\"<%= promoCode || '' %>\" required>
+                <button type=\"submit\">Apply</button>
+              </div>
+              <% if (typeof promoSuccess !== 'undefined' && promoSuccess) { %>
+                <p class=\"promo-msg-success\">✓ <%= promoSuccess %></p>
+              <% } %>
+              <% if (typeof promoError !== 'undefined' && promoError) { %>
+                <p class=\"promo-msg-error\">⚠ <%= promoError %></p>
+              <% } %>
+            </form>
+
+            <!-- Checkout Button -->
+            <form action=\"/checkout\" method=\"POST\" class=\"checkout-submit-form\">
+              <button type=\"submit\" class=\"btn btn-primary btn-block btn-checkout\">
+                Proceed to Checkout
+              </button>
+            </form>
+
+            <div class=\"summary-trust-badges\">
+              <span>🔒 256-Bit Encrypted Checkout</span>
+              <span>✓ Guaranteed Quality Delivery</span>
+            </div>
+          </div>
+        </div>
+      </div>
     <% } %>
   </main>
+
+  <%- include('partials/footer') %>
 </body>
 </html>

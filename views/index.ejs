@@ -1,28 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang=\"en\">
 <head>
-  <meta charset="UTF-8">
-  <title>CodeAlpha Store</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <title>Halo Market — Curated Everyday & Tech Essentials</title>
+  <link rel=\"stylesheet\" href=\"/css/style.css\">
+  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
+  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
+  <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap\" rel=\"stylesheet\">
 </head>
 <body>
   <%- include('partials/navbar') %>
 
-  <main class="container">
-    <h1>Our Products</h1>
-    <div class="product-grid">
-      <% products.forEach(product => { %>
-        <div class="product-card">
-          <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
-          <h3><%= product.name %></h3>
-          <p class="price">$<%= product.price.toFixed(2) %></p>
-          <a href="/products/<%= product._id %>" class="btn">View Details</a>
+  <!-- Hero Section -->
+  <header class=\"hero-section\">
+    <div class=\"hero-content\">
+      <div class=\"promo-tag-pill\">
+        <span class=\"pill-dot\"></span>
+        <span>Spring Collection • Use code <strong>ALPHA10</strong> for 10% Off</span>
+      </div>
+      <h1 class=\"hero-title\">Elevate Your Everyday Essentials</h1>
+      <p class=\"hero-sub\">
+        Discover curated audio, minimalist apparel, and artisan home essentials engineered for quality, longevity, and effortless living.
+      </p>
+      <div class=\"hero-actions\">
+        <a href=\"#products-catalog\" class=\"btn btn-hero-primary\">Shop Collection</a>
+        <a href=\"/?category=electronics\" class=\"btn btn-hero-secondary\">Explore Tech & Audio</a>
+      </div>
+
+      <div class=\"hero-stats-row\">
+        <div class=\"stat-item\">
+          <span class=\"stat-number\">10,000+</span>
+          <span class=\"stat-label\">Happy Customers</span>
         </div>
+        <div class=\"stat-divider\"></div>
+        <div class=\"stat-item\">
+          <span class=\"stat-number\">4.9 ★</span>
+          <span class=\"stat-label\">Average Rating</span>
+        </div>
+        <div class=\"stat-divider\"></div>
+        <div class=\"stat-item\">
+          <span class=\"stat-number\">2-Day</span>
+          <span class=\"stat-label\">Express Dispatch</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Value Propositions Bar -->
+  <section class=\"features-strip\">
+    <div class=\"features-container\">
+      <div class=\"feature-card\">
+        <div class=\"feature-icon\">🚚</div>
+        <div class=\"feature-text\">
+          <h4>Free Express Shipping</h4>
+          <p>On all orders over </p>
+        </div>
+      </div>
+      <div class=\"feature-card\">
+        <div class=\"feature-icon\">🔒</div>
+        <div class=\"feature-text\">
+          <h4>100% Secure Checkout</h4>
+          <p>Bank-grade encrypted payments</p>
+        </div>
+      </div>
+      <div class=\"feature-card\">
+        <div class=\"feature-icon\">🔄</div>
+        <div class=\"feature-text\">
+          <h4>30-Day Easy Returns</h4>
+          <p>Hassle-free guarantee</p>
+        </div>
+      </div>
+      <div class=\"feature-card\">
+        <div class=\"feature-icon\">⚡</div>
+        <div class=\"feature-text\">
+          <h4>Dedicated Support</h4>
+          <p>24/7 customer care team</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Catalog Section -->
+  <main class=\"container\" id=\"products-catalog\">
+    <!-- Catalog Header & Filters -->
+    <div class=\"catalog-header\">
+      <div>
+        <h2 class=\"section-heading\">Featured Products</h2>
+        <p class=\"section-subtitle\">Showing <%= totalCount %> handpicked item<%= totalCount === 1 ? '' : 's' %></p>
+      </div>
+
+      <!-- Sort & Filter Bar -->
+      <form action=\"/\" method=\"GET\" class=\"filter-bar-form\">
+        <% if (searchQuery) { %>
+          <input type=\"hidden\" name=\"q\" value=\"<%= searchQuery %>\">
+        <% } %>
+        <input type=\"hidden\" name=\"category\" value=\"<%= selectedCategory %>\">
+        <select name=\"sort\" onchange=\"this.form.submit()\" class=\"sort-select\" aria-label=\"Sort products\">
+          <option value=\"featured\" <%= sortBy === 'featured' ? 'selected' : '' %>>Featured</option>
+          <option value=\"price-low\" <%= sortBy === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
+          <option value=\"price-high\" <%= sortBy === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
+          <option value=\"rating\" <%= sortBy === 'rating' ? 'selected' : '' %>>Highest Rated</option>
+        </select>
+      </form>
+    </div>
+
+    <!-- Category Pills -->
+    <div class=\"category-pills-row\">
+      <% categories.forEach(cat => { %>
+        <a href=\"/?category=<%= cat.id %><%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>\"
+           class=\"category-pill <%= selectedCategory === cat.id ? 'active' : '' %>\">
+          <%= cat.label %>
+        </a>
       <% }) %>
     </div>
+
+    <% if (searchQuery) { %>
+      <div class=\"search-active-pill\">
+        Searching for: <strong>\"<%= searchQuery %>\"</strong>
+        <a href=\"/?category=<%= selectedCategory %>\" class=\"clear-search\">&times; Clear</a>
+      </div>
+    <% } %>
+
+    <!-- Product Grid -->
     <% if (products.length === 0) { %>
-      <p>No products yet. Run <code>npm run seed</code> to add sample products.</p>
+      <div class=\"empty-state-box\">
+        <div class=\"empty-icon\">🔍</div>
+        <h3>No products match your criteria</h3>
+        <p>Try searching for a different keyword or browse all categories.</p>
+        <a href=\"/\" class=\"btn btn-primary\">View All Products</a>
+      </div>
+    <% } else { %>
+      <div class=\"product-grid\">
+        <% products.forEach(product => { %>
+          <article class=\"product-card\">
+            <div class=\"product-media\">
+              <a href=\"/products/<%= product._id %>\">
+                <img src=\"<%= product.imageUrl %>\" alt=\"<%= product.name %>\" loading=\"lazy\" onerror=\"this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80'\">
+              </a>
+              <% if (product.badge) { %>
+                <span class=\"product-badge <%= product.badge.toLowerCase().replace(/\s+/g, '-') %>\"><%= product.badge %></span>
+              <% } %>
+            </div>
+
+            <div class=\"product-body\">
+              <div class=\"product-meta\">
+                <span class=\"category-tag\"><%= product.category ? product.category.toUpperCase() : 'GENERAL' %></span>
+                <span class=\"rating-tag\">★ <%= product.rating || 4.8 %> (<%= product.reviewsCount || 40 %>)</span>
+              </div>
+
+              <h3 class=\"product-title\">
+                <a href=\"/products/<%= product._id %>\"><%= product.name %></a>
+              </h3>
+
+              <p class=\"product-desc-short\"><%= product.description.substring(0, 75) %>...</p>
+
+              <div class=\"product-footer\">
+                <div class=\"price-stack\">
+                  <span class=\"current-price\">$<%= product.price.toFixed(2) %></span>
+                  <% if (product.originalPrice && product.originalPrice > product.price) { %>
+                    <span class=\"original-price\">$<%= product.originalPrice.toFixed(2) %></span>
+                  <% } %>
+                </div>
+
+                <div class=\"product-card-actions\">
+                  <form action=\"/cart/add/<%= product._id %>\" method=\"POST\" class=\"inline-form\">
+                    <input type=\"hidden\" name=\"quantity\" value=\"1\">
+                    <button type=\"submit\" class=\"btn btn-sm-add\" title=\"Add to Cart\">+ Add</button>
+                  </form>
+                  <a href=\"/products/<%= product._id %>\" class=\"btn-quick-view\" title=\"View details\">Details</a>
+                </div>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
     <% } %>
   </main>
+
+  <!-- Mid-Page Promotional Banner -->
+  <section class=\"promo-banner-section\">
+    <div class=\"promo-banner-card\">
+      <div class=\"promo-text-side\">
+        <span class=\"badge-flash\">LIMITED TIME</span>
+        <h2>Barista Grade Precision, Every Morning</h2>
+        <p>Save 25% on our premium kitchen and pour-over collection with coupon code <strong>ALPHA10</strong> at checkout.</p>
+        <a href=\"/?category=home\" class=\"btn btn-amber\">Shop Home & Kitchen</a>
+      </div>
+      <div class=\"promo-img-side\">
+        <img src=\"https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&q=80\" alt=\"Coffee maker promotion\">
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
 </body>
 </html>

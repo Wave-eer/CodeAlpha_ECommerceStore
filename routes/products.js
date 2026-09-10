@@ -1,78 +1,113 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const Store = require('../config/store');
 
-const sampleProducts = [
-  {
-    _id: '66c5a0110000000000000001',
-    name: 'Wireless Headphones',
-    description: 'Comfortable over-ear wireless headphones with active noise cancellation and 30-hour battery life.',
-    price: 59.99,
-    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80',
-    stock: 15,
-    category: 'electronics'
-  },
-  {
-    _id: '66c5a0110000000000000002',
-    name: 'Running Shoes',
-    description: 'Lightweight performance running shoes with breathable mesh upper and responsive cushioning.',
-    price: 79.99,
-    imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80',
-    stock: 20,
-    category: 'fashion'
-  },
-  {
-    _id: '66c5a0110000000000000003',
-    name: 'Coffee Maker',
-    description: '12-cup programmable coffee maker with auto shut-off and thermal carafe.',
-    price: 34.99,
-    imageUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&q=80',
-    stock: 10,
-    category: 'home'
-  },
-  {
-    _id: '66c5a0110000000000000004',
-    name: 'Backpack',
-    description: 'Durable 25L waterproof travel backpack with padded laptop compartment.',
-    price: 44.99,
-    imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80',
-    stock: 25,
-    category: 'fashion'
-  }
-];
-
-// Homepage: list all products
+// Homepage: list products with search, category filtering, and sorting
 router.get('/', async (req, res) => {
   try {
-    let products = [];
-    if (Product.db.readyState === 1) {
-      products = await Product.find().sort({ createdAt: -1 });
+    const selectedCategory = (req.query.category || 'all').toLowerCase();
+    const searchQuery = (req.query.q || '').trim().toLowerCase();
+    const sortBy = req.query.sort || 'featured';
+
+    let allProducts = await Product.find({});
+    if (!allProducts || allProducts.length === 0) {
+      allProducts = Store.defaultProducts;
     }
-    if (!products || products.length === 0) {
-      products = sampleProducts;
+
+    let filtered = [...allProducts];
+
+    // Filter by Category
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(p => p.category && p.category.toLowerCase() === selectedCategory);
     }
-    res.render('index', { products });
+
+    // Filter by Search Query
+    if (searchQuery) {
+      filtered = filtered.filter(p => {
+        const nameMatch = p.name && p.name.toLowerCase().includes(searchQuery);
+        const descMatch = p.description && p.description.toLowerCase().includes(searchQuery);
+        const catMatch = p.category && p.category.toLowerCase().includes(searchQuery);
+        return nameMatch || descMatch || catMatch;
+      });
+    }
+
+    // Sort Products
+    if (sortBy === 'price-low') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'rating') {
+      filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+
+    const categories = [
+      { id: 'all', label: 'All Items' },
+      { id: 'electronics', label: 'Electronics & Audio' },
+      { id: 'fashion', label: 'Apparel & Footwear' },
+      { id: 'home', label: 'Home & Kitchen' },
+      { id: 'lifestyle', label: 'Travel & Gear' }
+    ];
+
+    res.render('index', {
+      products: filtered,
+      categories,
+      selectedCategory,
+      searchQuery,
+      sortBy,
+      totalCount: filtered.length
+    });
   } catch (err) {
-    res.render('index', { products: sampleProducts });
+    console.error('Error loading products for homepage:', err);
+    res.render('index', {
+      products: Store.defaultProducts,
+      categories: [
+        { id: 'all', label: 'All Items' },
+        { id: 'electronics', label: 'Electronics & Audio' },
+        { id: 'fashion', label: 'Apparel & Footwear' },
+        { id: 'home', label: 'Home & Kitchen' },
+        { id: 'lifestyle', label: 'Travel & Gear' }
+      ],
+      selectedCategory: 'all',
+      searchQuery: '',
+      sortBy: 'featured',
+      totalCount: Store.defaultProducts.length
+    });
   }
 });
 
 // Product details page
 router.get('/products/:id', async (req, res) => {
   try {
-    let product = null;
-    if (Product.db.readyState === 1) {
-      product = await Product.findById(req.params.id);
-    }
+    const { id } = req.params;
+    let product = await Product.findById(id);
+
     if (!product) {
-      product = sampleProducts.find(p => p._id.toString() === req.params.id);
+      const fallback = Store.defaultProducts.find(p => p._id.toString() === id);
+      if (fallback) product = fallback;
     }
-    if (!product) return res.status(404).send('Product not found');
-    res.render('product-details', { product });
+
+    if (!product) {
+      return res.status(404).render('404', {
+        title: 'Product Not Found',
+        message: 'The requested product could not be found.'
+      });
+    }
+
+    // Load related products
+    let allProducts = await Product.find({});
+    if (!allProducts || allProducts.length === 0) allProducts = Store.defaultProducts;
+    const relatedProducts = allProducts
+      .filter(p => p._id.toString() !== product._id.toString() && (p.category === product.category || !product.category))
+      .slice(0, 3);
+
+    res.render('product-details', {
+      product,
+      relatedProducts
+    });
   } catch (err) {
-    const product = sampleProducts.find(p => p._id.toString() === req.params.id);
-    if (!product) return res.status(404).send('Product not found');
-    res.render('product-details', { product });
+    console.error('Error loading product details:', err);
+    res.status(404).redirect('/');
   }
 });
 

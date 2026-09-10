@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Store = require('../config/store');
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -7,7 +8,6 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true }
 }, { timestamps: true });
 
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -15,9 +15,22 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Instance method to check password
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+const MongooseUser = mongoose.models.User || mongoose.model('User', userSchema);
+
+const User = new Proxy(MongooseUser, {
+  get(target, prop) {
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      return typeof target[prop] === 'function' ? target[prop].bind(target) : target[prop];
+    }
+    if (prop in Store.User) {
+      return typeof Store.User[prop] === 'function' ? Store.User[prop].bind(Store.User) : Store.User[prop];
+    }
+    return typeof target[prop] === 'function' ? target[prop].bind(target) : target[prop];
+  }
+});
+
+module.exports = User;

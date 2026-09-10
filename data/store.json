@@ -1,0 +1,207 @@
+{
+  "products": [
+    {
+      "_id": "66c5a0110000000000000001",
+      "name": "AcousticPro Wireless ANC Headphones",
+      "category": "electronics",
+      "price": 79.99,
+      "originalPrice": 119.99,
+      "description": "Immersive sound with hybrid active noise cancellation, 40-hour battery life, fast charging, and memory-foam ear cushions designed for all-day comfort.",
+      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=80",
+      "stock": 18,
+      "rating": 4.8,
+      "reviewsCount": 142,
+      "badge": "Bestseller",
+      "features": [
+        "Active Noise Cancellation (ANC)",
+        "40-Hour Playtime & USB-C Fast Charge",
+        "Built-in Dual HD Microphones",
+        "Bluetooth 5.3 Multi-Point Connect"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000002",
+      "name": "AeroStride Breathable Running Shoes",
+      "category": "fashion",
+      "price": 64.99,
+      "originalPrice": 89.99,
+      "description": "Engineered with responsive foam cushioning, ultra-breathable engineered knit upper, and high-traction rubber outsole for pavement and trail.",
+      "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=80",
+      "stock": 24,
+      "rating": 4.7,
+      "reviewsCount": 98,
+      "badge": "Hot Deal",
+      "features": [
+        "Shock-Absorbing EVA Midsole",
+        "Seamless Breathable Mesh Upper",
+        "Anti-Slip Grippy Rubber Outsole",
+        "Ultra Lightweight: 240g"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000003",
+      "name": "BaristaTouch Cold Brew & Coffee Maker",
+      "category": "home",
+      "price": 49.99,
+      "originalPrice": 69.99,
+      "description": "Precision temperature programmable coffee system with 12-cup insulated stainless thermal carafe, bold brew selector, and 24h delay timer.",
+      "imageUrl": "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=700&q=80",
+      "stock": 12,
+      "rating": 4.9,
+      "reviewsCount": 230,
+      "badge": "Staff Pick",
+      "features": [
+        "Double-Walled Stainless Steel Carafe",
+        "Programmable 24-Hour Brew Timer",
+        "Reusable Gold-Tone Mesh Filter",
+        "Auto Shut-Off & Keep Warm"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000004",
+      "name": "Vanguard Weatherproof Commuter Backpack",
+      "category": "lifestyle",
+      "price": 54.99,
+      "originalPrice": 75,
+      "description": "Rugged 28L expandable travel pack with padded 16\" laptop compartment, water-repellent Cordura fabric, hidden anti-theft pocket, and luggage strap.",
+      "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700&q=80",
+      "stock": 20,
+      "rating": 4.6,
+      "reviewsCount": 87,
+      "badge": "Popular",
+      "features": [
+        "Water-Resistant 900D Nylon",
+        "Dedicated 16-Inch Padded Laptop Sleeve",
+        "Ergonomic Breathable Back Padding",
+        "Integrated USB Pass-through Port"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000005",
+      "name": "AuraPulse Fitness & Health Smartwatch",
+      "category": "electronics",
+      "price": 44.99,
+      "originalPrice": 59.99,
+      "description": "Vibrant 1.43\" AMOLED always-on display, 24/7 heart rate and blood oxygen monitoring, 30+ workout modes, and 10-day battery standby.",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700&q=80",
+      "stock": 30,
+      "rating": 4.5,
+      "reviewsCount": 65,
+      "badge": "New",
+      "features": [
+        "1.43\" High-Res AMOLED Touchscreen",
+        "Heart Rate & SpO2 Biometrics",
+        "5ATM Water Resistance (50m)",
+        "Up to 10-Day Battery Life"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000006",
+      "name": "ErgoRise Aluminum Laptop Stand",
+      "category": "electronics",
+      "price": 29.99,
+      "originalPrice": 39.99,
+      "description": "CNC-machined anodized aluminum riser with 6 adjustable height angles, open ventilation cooling design, and anti-slip silicone cushions.",
+      "imageUrl": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=700&q=80",
+      "stock": 40,
+      "rating": 4.8,
+      "reviewsCount": 184,
+      "badge": "Bestseller",
+      "features": [
+        "Heavy-Duty Aerospace Aluminum",
+        "6 Ergonomic Height Settings",
+        "Optimized Heat Dissipation",
+        "Folds Flat for Travel"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000007",
+      "name": "Artisan Ceramic Pour-Over & Mug Set",
+      "category": "home",
+      "price": 36.99,
+      "originalPrice": 48,
+      "description": "Handcrafted matte black ceramic dripper and matching 14oz stoneware mug. Engineered spiral interior ribs for optimal coffee flow extraction.",
+      "imageUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=700&q=80",
+      "stock": 15,
+      "rating": 4.7,
+      "reviewsCount": 52,
+      "badge": "Top Rated",
+      "features": [
+        "High-Fired Durable Stoneware",
+        "Spiral Extraction Grooves",
+        "Dishwasher & Microwave Safe",
+        "Includes 40 Unbleached Cone Filters"
+      ]
+    },
+    {
+      "_id": "66c5a0110000000000000008",
+      "name": "Heritage Heavyweight Oversized Cotton Tee",
+      "category": "fashion",
+      "price": 24.99,
+      "originalPrice": 32,
+      "description": "280 GSM 100% combed ring-spun organic cotton with reinforced ribbed collar, drop shoulders, and relaxed boxy drape that softens with every wash.",
+      "imageUrl": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=700&q=80",
+      "stock": 50,
+      "rating": 4.6,
+      "reviewsCount": 114,
+      "badge": "Essential",
+      "features": [
+        "280 GSM Ultra-Durable Cotton",
+        "Pre-Shrunk & Colorfast Dye",
+        "Boxy Relaxed Streetwear Cut",
+        "Reinforced Double-Stitched Seams"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "_id": "6aa313364aad5997da25aa38",
+      "name": "Tester",
+      "email": "test@demo.com",
+      "password": "$2a$10$ZtyZllH5bCK8Fz4YytRYWeWxaqp/chdB.lVlXt6Z252gSEhfYH.va",
+      "createdAt": "2026-09-10T20:29:42.143Z"
+    },
+    {
+      "_id": "6aa315725952f21d928ebedf",
+      "name": "Elena Fisher",
+      "email": "elena@example.com",
+      "password": "$2a$10$6Vr6Pn0VMolgIH9BCqgU4eQNuSvFXuy/ars48t3lV6xAGRAhxf75W",
+      "createdAt": "2026-09-10T20:39:14.305Z"
+    }
+  ],
+  "orders": [
+    {
+      "_id": "6aa31336213f8cc757246537",
+      "user": "6aa313364aad5997da25aa38",
+      "items": [
+        {
+          "product": "66c5a0110000000000000001",
+          "name": "AcousticPro Wireless ANC Headphones",
+          "price": 79.99,
+          "quantity": 2
+        }
+      ],
+      "totalAmount": 159.98,
+      "discount": 0,
+      "status": "Placed",
+      "createdAt": "2026-09-10T20:29:42.308Z"
+    },
+    {
+      "_id": "6aa3157237f79350719c1f4e",
+      "user": "6aa315725952f21d928ebedf",
+      "items": [
+        {
+          "product": "66c5a0110000000000000001",
+          "name": "AcousticPro Wireless ANC Headphones",
+          "price": 79.99,
+          "quantity": 2,
+          "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=80"
+        }
+      ],
+      "totalAmount": 143.98,
+      "discount": 16,
+      "status": "Processing",
+      "createdAt": "2026-09-10T20:39:14.520Z"
+    }
+  ]
+}
